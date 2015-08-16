@@ -31,6 +31,8 @@ function LSTM.lstm(input_size, rnn_size, n, dropout)
     local h2h = nn.Linear(rnn_size, 4 * rnn_size)(prev_h)
     local all_input_sums = nn.CAddTable()({i2h, h2h})
 
+    -- Reshape to (batch_size, n_gates, hid_size)
+    -- Then slize the n_gates dimension, i.e dimension 2
     local reshaped = nn.Reshape(4, rnn_size)(all_input_sums)
     local n1, n2, n3, n4 = nn.SplitTable(2)(reshaped):split(4)
     -- decode the gates
